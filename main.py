@@ -5,11 +5,12 @@ from datetime import datetime, timedelta
 
 class TaskManagerApp:
     def __init__(self, root):
-        self.root = root
+        self.root = root # Se inicia la aplicacion
         self.root.title("Gestión de Tareas")
         
-        self.tasks = []
+        self.tasks = [] # Se inicializa la lista para guardar tareas
         
+        # Creacion de los titulos y botones de la aplicacion
         self.title_label = tk.Label(root, text="Título:")
         self.title_entry = tk.Entry(root)
         
@@ -68,6 +69,7 @@ class TaskManagerApp:
         self.complete_button.config(pady=3, padx=6)
 
     def add_task(self):
+        # Variables de la informacion de las tareas
         title = self.title_entry.get()
         start = self.start_entry.get()
         end = self.end_entry.get()
@@ -78,29 +80,28 @@ class TaskManagerApp:
             start_date = datetime.strptime(start, "%d-%m-%Y %H:%M")
             end_date = datetime.strptime(end, "%d-%m-%Y %H:%M")
             
-            if end_date < start_date:
+            if end_date < start_date: # Se verifica si la fecha de finalizacion es menor a la de inicio
                 messagebox.showerror("Error", "La fecha de finalización debe ser posterior a la fecha de inicio.")
                 return
             
-            time_remaining = end_date - start_date # Arregle esto
+            time_remaining = end_date - start_date # Se calcula el tiempo restante entre las dos fechas
             
-            self.tasks.append((title, start, end, description, subtasks, str(time_remaining)))
+            self.tasks.append((title, start, end, description, subtasks, str(time_remaining))) # Se añade la tarea
             
-            self.update_task_list()
+            self.update_task_list() 
             self.clear_entries()
         except ValueError:
             messagebox.showerror("Error", "Formato de fecha incorrecto. Use DD-MM-YYYY HH:MM.")
     
     def complete_fields(self):
-        selected_item = self.task_list.selection()
-        if not selected_item:
+        selected_item = self.task_list.selection() # Obtenemos la tarea seleccionada
+        if not selected_item: # Si no se selecciono nada se le pedira al usuario que seleccione una tarea
             messagebox.showerror("Error", "Seleccione una tarea para rellenar los campos.")
             return
         
         try:
-            info = self.task_list.item(selected_item[0])
+            info = self.task_list.item(selected_item[0]) # Informacion de la tarea
             dicObject = info.values()
-
             values = list(dicObject)
             
             title = values[2][0]
@@ -109,6 +110,7 @@ class TaskManagerApp:
             description = values[2][3]
             subtasks = values[2][4]
 
+            # Se añade la informacion a los campos vacios
             self.title_entry.insert(tk.END, title)
             self.start_entry.insert(tk.END, start)
             self.end_entry.insert(tk.END, end)
@@ -123,7 +125,7 @@ class TaskManagerApp:
             messagebox.showerror("Error", "Seleccione una tarea para editar.")
             return
         
-        index = self.task_list.index(selected_item)
+        index = self.task_list.index(selected_item) # Obtiene la posicion de la tarea en la tabla
         
         title = self.title_entry.get()
         start = self.start_entry.get()
@@ -139,7 +141,7 @@ class TaskManagerApp:
                 messagebox.showerror("Error", "La fecha de finalización debe ser posterior a la fecha de inicio.")
                 return
             
-            time_remaining = end_date - datetime.now()
+            time_remaining = end_date - start_date
             
             self.tasks[index] = (title, start, end, description, subtasks, str(time_remaining))
             
