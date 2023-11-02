@@ -85,7 +85,7 @@ def actualizar_calendario():
     tarea = tareas[fecha]
     tarea_str = ""
     for i, t in enumerate(tarea):
-        tarea_str += f"{i + 1}. {t['titulo']}\n"
+        tarea_str += f"{i + 1}. {t['titulo']}: {t['descripcion']}\n"
     tarea_label.config(text=tarea_str)
         
 def establecer_fecha():
